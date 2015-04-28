@@ -1,11 +1,11 @@
-var express = require('express');
-var debug = require('debug')('sip:server');
-var http = require('http');
-var path = require('path');
-var logger = require('morgan')
-var apiRoute = require('./routes/api');
-var bodyParser = require('body-parser');
-var app = express();
+var express     = require('express');
+var debug       = require('debug')('sip:server');
+var http        = require('http');
+var path        = require('path');
+var logger      = require('morgan')
+var apiRoute    = require('./routes/api');
+var bodyParser  = require('body-parser');
+var app         = express();
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -15,6 +15,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api', apiRoute);
 
 // catch 404 and forward to error handler
+app.get('/', function(req, res) {
+  res.send('index');
+});
+
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
@@ -126,4 +130,3 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
-
