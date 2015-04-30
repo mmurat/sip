@@ -1,7 +1,9 @@
 .git
 node_modules
-public/css/bootstrap*
+public/css/*
 public/js/bootstrap*
 public/js/jquery*
 public/js/npm.js
 public/js/react*
+public/fonts/*
+public/js/.module-cache

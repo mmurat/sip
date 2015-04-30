@@ -6,6 +6,7 @@ var logger      = require('morgan')
 var apiRoute    = require('./routes/api');
 var bodyParser  = require('body-parser');
 var app         = express();
+var db          = require('./config/db');
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
