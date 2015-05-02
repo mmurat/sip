@@ -1,7 +1,11 @@
 /** @jsx React.DOM */
 var Menu = React.createClass({displayName: "Menu",
-  render: function() {
 
+  handleAddEvent: function() {
+    return renderComponent.AddEvents;
+  },
+
+  render: function() {
     return(
       React.createElement("nav", {className: "navbar navbar-default navbar-fixed-top"}, 
       React.createElement("div", {className: "container"}, 
@@ -16,8 +20,8 @@ var Menu = React.createClass({displayName: "Menu",
         ), 
         React.createElement("div", {id: "navbar", className: "navbar-collapse collapse"}, 
           React.createElement("ul", {className: "nav navbar-nav"}, 
-            React.createElement("li", {className: "active"}, React.createElement("a", {href: "#"}, "Home")), 
-            React.createElement("li", null, React.createElement("a", {href: "#about"}, "About")), 
+            React.createElement("li", {onClick: this.handleAddEvent, className: "active"}, React.createElement("a", {href: "#"}, "Haber Ekle")), 
+            React.createElement("li", null, React.createElement("a", {href: "#about"}, "Haber Listesi")), 
             React.createElement("li", null, React.createElement("a", {href: "#contact"}, "Contact"))
           ), 
           React.createElement("ul", {className: "nav navbar-nav navbar-right"}, 
@@ -28,7 +32,6 @@ var Menu = React.createClass({displayName: "Menu",
         )
       )
     )
-
   );
   }
 });
@@ -63,25 +66,58 @@ var EventRoot = React.createClass({displayName: "EventRoot",
 });
 
 var AddEvents = React.createClass({displayName: "AddEvents",
+
+  handleSubmit: function(e) {
+    e.preventDefault();
+    $.ajax({
+      type: 'POST',
+      url: '/api/addNews',
+      data: {
+        event: {
+          title: React.findDOMNode(this.refs.title).value.trim(),
+          body: React.findDOMNode(this.refs.body).value.trim(),
+          source: React.findDOMNode(this.refs.source).value.trim()
+      }
+    },
+      success: function(data) {
+        console.log(data);
+      }
+
+    });
+  },
+
+
   render: function() {
     return (
-      React.createElement("div", {className: "row"}, 
-      React.createElement("div", {className: "col-xs-8 col-xs-offset-1"}, 
-      React.createElement("form", null, 
-        React.createElement("div", {className: "form-group"}, 
-          React.createElement("label", {for: "title"}, "Haber Başlığı"), 
-          React.createElement("input", {type: "text", className: "form-control", id: "title", placeholder: "Başlık"})
-        ), 
-        React.createElement("div", {className: "form-group"}, 
-          React.createElement("label", {for: "body"}, "Haber"), 
-          React.createElement("textarea", {className: "form-control", rows: "3", id: "body", placeholder: "Haber Metni"})
-        ), 
-        React.createElement("button", {type: "submit", class: "btn btn-default"}, "Kaydet")
-      )
-      )
-      )
+        React.createElement("div", {className: "row"}, 
+            React.createElement("div", {className: "col-xs-8 col-xs-offset-1"}, 
+                React.createElement("form", {onSubmit: this.handleSubmit}, 
+                    React.createElement("div", {className: "form-group"}, 
+                        React.createElement("label", {for: "title"}, "Haber Başlığı"), 
+                        React.createElement("input", {type: "text", ref: "title", className: "form-control", id: "title", placeholder: "Başlık"})
+                    ), 
+                    React.createElement("div", {className: "form-group"}, 
+                        React.createElement("label", {for: "body"}, "Haber"), 
+                        React.createElement("textarea", {className: "form-control", ref: "body", rows: "3", id: "body", placeholder: "Haber Metni"})
+                    ), 
+                    React.createElement("div", {className: "form-group"}, 
+                        React.createElement("label", {for: "source"}, "Haber Kaynaği"), 
+                        React.createElement("input", {type: "text", ref: "source", className: "form-control", ref: "source", id: "source", placeholder: "Haber Kaynağı"})
+                    ), 
+
+                    React.createElement("button", {type: "submit", class: "btn btn-default"}, "Kaydet")
+                )
+        )
     )
+    );
   }
 });
+
+var renderComponent = {
+  addNews: function() {
+    console.log(this);
+    return React.render(React.createElement(AddEvents, null), document.getElementById("content"));
+  }
+};
 
 React.render(React.createElement(App, null), document.getElementById("content"));

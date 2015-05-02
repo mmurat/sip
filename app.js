@@ -1,4 +1,5 @@
 var express     = require('express');
+var db          = require('./config/db');
 var debug       = require('debug')('sip:server');
 var http        = require('http');
 var path        = require('path');
@@ -6,7 +7,6 @@ var logger      = require('morgan')
 var apiRoute    = require('./routes/api');
 var bodyParser  = require('body-parser');
 var app         = express();
-var db          = require('./config/db');
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -39,15 +39,15 @@ if (app.get('env') === 'development') {
     });
   });
 }
-
-// production error handler
-// no stacktraces leaked to user
+//
+// // production error handler
+// // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
-  res.status(err.status || 500);
-  res.render('error', {
-    message: err.message,
-    error: {}
-  });
+   res.status(err.status || 500);
+   res.render('error', {
+     message: err.message,
+     error: {}
+   });
 });
 
 

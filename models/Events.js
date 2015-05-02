@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-var Events = new Schema({
+var Events = new mongoose.Schema({
   docType: { type: Boolean, default: false },
   title:  String,
   author: String,
@@ -25,4 +25,4 @@ var Events = new Schema({
 
 
 
-module.exports = mongoose.model( 'Events', Events );
+module.exports = mongoose.model('Events', Events );
